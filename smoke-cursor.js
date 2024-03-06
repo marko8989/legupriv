@@ -620,15 +620,22 @@ function resizeCanvas() {
   }
 }
 
-canvas.addEventListener('mousemove', e => {
-  pointers[0].down = true;
-  pointers[0].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
-  
-  pointers[0].moved = pointers[0].down;
-  pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
-  pointers[0].dy = (e.offsetY - pointers[0].y) * 10.0;
-  pointers[0].x = e.offsetX;
-  pointers[0].y = e.offsetY;
+document.addEventListener('mousemove', e => {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;    // Relationship bitmap vs. element for X
+  const scaleY = canvas.height / rect.height;  // Relationship bitmap vs. element for Y
+
+  const canvasX = (e.clientX - rect.left) * scaleX;
+  const canvasY = (e.clientY - rect.top) * scaleY;
+
+  // Now canvasX and canvasY are the mouse coordinates relative to the canvas
+  // Use these coordinates to update your pointer position
+  const pointer = pointers[0]; // Assuming you're using the first pointer for reference
+  pointer.moved = pointer.down;
+  pointer.dx = (canvasX - pointer.x) * 10.0;
+  pointer.dy = (canvasY - pointer.y) * 10.0;
+  pointer.x = canvasX;
+  pointer.y = canvasY;
 });
 
 canvas.addEventListener('touchmove', e => {
