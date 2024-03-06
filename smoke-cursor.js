@@ -628,15 +628,15 @@ document.addEventListener('mousemove', e => {
   const canvasX = (e.clientX - rect.left) * scaleX;
   const canvasY = (e.clientY - rect.top) * scaleY;
 
-  // Now canvasX and canvasY are the mouse coordinates relative to the canvas
-  // Use these coordinates to update your pointer position
-  const pointer = pointers[0]; // Assuming you're using the first pointer for reference
+  // Update pointer with canvas-relative coordinates
+  const pointer = pointers[0]; // Using the first pointer for simplicity
   pointer.moved = pointer.down;
   pointer.dx = (canvasX - pointer.x) * 10.0;
   pointer.dy = (canvasY - pointer.y) * 10.0;
   pointer.x = canvasX;
   pointer.y = canvasY;
 });
+
 
 canvas.addEventListener('touchmove', e => {
   e.preventDefault();
