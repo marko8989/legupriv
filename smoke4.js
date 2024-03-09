@@ -596,7 +596,7 @@ function splat(x, y, dx, dy, color) {
   velocity.swap();
 
   gl.uniform1i(splatProgram.uniforms.uTarget, density.read[2]);
-  gl.uniform3f(splatProgram.uniforms.color, color[0] * 0.3, color[1] * 0.3, color[2] * 0.3);
+  gl.uniform3f(splatProgram.uniforms.color, 0.529, 0.357, 1.0);
   blit(density.write[1]);
   density.swap();
 }
@@ -622,7 +622,7 @@ function resizeCanvas() {
 
 canvas.addEventListener('mousemove', e => {
   pointers[0].down = true;
-  pointers[0].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
+  pointers[0].color = [0.529, 0.357, 1];
   
   pointers[0].moved = pointers[0].down;
   pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
@@ -644,11 +644,6 @@ canvas.addEventListener('touchmove', e => {
   }
 }, false);
 
-// canvas.addEventListener('mousedown', () => {
-//   pointers[0].down = true;
-//   pointers[0].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
-// });
-
 canvas.addEventListener('touchstart', e => {
   e.preventDefault();
   const touches = e.targetTouches;
@@ -660,7 +655,8 @@ canvas.addEventListener('touchstart', e => {
     pointers[i].down = true;
     pointers[i].x = touches[i].pageX;
     pointers[i].y = touches[i].pageY;
-    pointers[i].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
+    pointers[0].color = [0.529, 0.357, 1]; 
+
   }
 });
 
