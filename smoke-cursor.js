@@ -621,9 +621,9 @@ function resizeCanvas() {
 }
 
 
-document.addEventListener('mousemove', throttle(function(e) {
+canvas.addEventListener('mousemove', throttle(function(e) {
   pointers[0].down = true;
-  pointers[0].color = [135 / 255, 91 / 255, 255 / 255];
+  pointers[0].color = [135 / 255, 255 / 255, 255 / 255];
   pointers[0].moved = pointers[0].down;
   pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
   pointers[0].dy = (e.offsetY - pointers[0].y) * 10.0;
@@ -632,7 +632,7 @@ document.addEventListener('mousemove', throttle(function(e) {
 }, 100)); // Adjust the 100ms limit as needed
 
 
-document.addEventListener('touchmove', throttle(function(e) {
+canvas.addEventListener('touchmove', throttle(function(e) {
   e.preventDefault();
   const touches = e.targetTouches;
   for (let i = 0; i < touches.length; i++) {
@@ -651,7 +651,7 @@ document.addEventListener('touchmove', throttle(function(e) {
 //   pointers[0].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
 // });
 
-document.addEventListener('touchstart', e => {
+canvas.addEventListener('touchstart', e => {
   e.preventDefault();
   const touches = e.targetTouches;
   for (let i = 0; i < touches.length; i++) {
@@ -666,7 +666,7 @@ document.addEventListener('touchstart', e => {
   }
 });
 
-document.addEventListener('mousedown', () => {
+canvas.addEventListener('mousedown', () => {
   pointers[0].down = true;
 });
 
@@ -675,7 +675,7 @@ document.addEventListener('mouseup', () => {
 });
 
 
-document.addEventListener('touchend', e => {
+canvas.addEventListener('touchend', e => {
   const touches = e.changedTouches;
   for (let i = 0; i < touches.length; i++)
   for (let j = 0; j < pointers.length; j++)
