@@ -603,7 +603,7 @@ function splat(x, y, dx, dy, color) {
 
 function multipleSplats(amount) {
   for (let i = 0; i < amount; i++) {
-    const color = [Math.random() * 10, Math.random() * 10, Math.random() * 10];
+    const color = [0.529, 0.357, 1.0];
     const x = canvas.width * Math.random();
     const y = canvas.height * Math.random();
     const dx = 1000 * (Math.random() - 0.5);
