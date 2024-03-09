@@ -638,7 +638,7 @@ function resizeCanvas() {
   }
 }
 
-document.addEventListener('mousemove', throttle(function(e) {
+window.addEventListener('mousemove', throttle(function(e) {
   // Extract your existing mousemove logic here
   pointers[0].moved = pointers[0].down;
   pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
@@ -648,7 +648,7 @@ document.addEventListener('mousemove', throttle(function(e) {
 }, 100)); // Adjust the 100ms limit as needed
 
 
-document.addEventListener('mousemove', throttle(function(e) {
+window.addEventListener('mousemove', throttle(function(e) {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width; // Relation between actual canvas size and displayed size
     const scaleY = canvas.height / rect.height;
@@ -673,7 +673,7 @@ document.addEventListener('mousemove', throttle(function(e) {
 //   pointers[0].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
 // });
 
-document.addEventListener('touchstart', e => {
+window.addEventListener('touchstart', e => {
   e.preventDefault();
   const touches = e.targetTouches;
   for (let i = 0; i < touches.length; i++) {
