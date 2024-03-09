@@ -647,7 +647,7 @@ document.addEventListener('mousemove', throttle(function(e) {
 }, 100)); // Adjust the 100ms limit as needed
 
 
-canvas.addEventListener('touchmove', throttle(function(e) {
+document.addEventListener('touchmove', throttle(function(e) {
   e.preventDefault();
   const touches = e.targetTouches;
   for (let i = 0; i < touches.length; i++) {
@@ -666,7 +666,7 @@ canvas.addEventListener('touchmove', throttle(function(e) {
 //   pointers[0].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
 // });
 
-canvas.addEventListener('touchstart', e => {
+document.addEventListener('touchstart', e => {
   e.preventDefault();
   const touches = e.targetTouches;
   for (let i = 0; i < touches.length; i++) {
