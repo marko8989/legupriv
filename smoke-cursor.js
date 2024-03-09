@@ -5,13 +5,13 @@ canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 
 let config = {
-  TEXTURE_DOWNSAMPLE: 50,
-  DENSITY_DISSIPATION: 50,
-  VELOCITY_DISSIPATION: 50,
+  TEXTURE_DOWNSAMPLE: 6,
+  DENSITY_DISSIPATION: 0.98,
+  VELOCITY_DISSIPATION: 0.99,
   PRESSURE_DISSIPATION: 0.8,
   PRESSURE_ITERATIONS: 15,
-  CURL: 20,
-  SPLAT_RADIUS: 0.5
+  CURL: 30,
+  SPLAT_RADIUS: 0.0002
 };
 
 
@@ -493,7 +493,7 @@ const blit = (() => {
 })();
 
 let lastTime = Date.now();
-multipleSplats(parseInt(Math.random() * 5) + 3);
+multipleSplats(parseInt(Math.random() * 20) + 5);
 update();
 
 function update() {
@@ -620,31 +620,29 @@ function resizeCanvas() {
   }
 }
 
-
-canvas.addEventListener('mousemove', throttle(function(e) {
+canvas.addEventListener('mousemove', e => {
   pointers[0].down = true;
   pointers[0].color = [135 / 255, 91 / 255, 255 / 255];
+  
   pointers[0].moved = pointers[0].down;
   pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
   pointers[0].dy = (e.offsetY - pointers[0].y) * 10.0;
   pointers[0].x = e.offsetX;
   pointers[0].y = e.offsetY;
-}, 100)); // Adjust the 100ms limit as needed
+});
 
-
-canvas.addEventListener('touchmove', throttle(function(e) {
+canvas.addEventListener('touchmove', e => {
   e.preventDefault();
   const touches = e.targetTouches;
   for (let i = 0; i < touches.length; i++) {
-    let pointer = pointers[i] || new pointerPrototype();
+    let pointer = pointers[i];
     pointer.moved = pointer.down;
     pointer.dx = (touches[i].pageX - pointer.x) * 10.0;
     pointer.dy = (touches[i].pageY - pointer.y) * 10.0;
     pointer.x = touches[i].pageX;
     pointer.y = touches[i].pageY;
   }
-}, 100), { passive: false });
-
+}, false);
 
 // canvas.addEventListener('mousedown', () => {
 //   pointers[0].down = true;
@@ -666,16 +664,11 @@ canvas.addEventListener('touchstart', e => {
   }
 });
 
-canvas.addEventListener('mousedown', () => {
-  pointers[0].down = true;
-});
-
-document.addEventListener('mouseup', () => {
+window.addEventListener('mouseup', () => {
   pointers[0].down = false;
 });
 
-
-canvas.addEventListener('touchend', e => {
+window.addEventListener('touchend', e => {
   const touches = e.changedTouches;
   for (let i = 0; i < touches.length; i++)
   for (let j = 0; j < pointers.length; j++)
