@@ -493,7 +493,7 @@ const blit = (() => {
 })();
 
 let lastTime = Date.now();
-multipleSplats(parseInt(Math.random() * 20) + 5);
+multipleSplats(parseInt(Math.random() * 2) + 1);
 update();
 
 function update() {
@@ -603,11 +603,11 @@ function splat(x, y, dx, dy, color) {
 
 function multipleSplats(amount) {
   for (let i = 0; i < amount; i++) {
-    const color = [Math.random() * 10, Math.random() * 10, Math.random() * 10];
+    const color = [Math.random() * 5, Math.random() * 5, Math.random() * 5];
     const x = canvas.width * Math.random();
     const y = canvas.height * Math.random();
-    const dx = 1000 * (Math.random() - 0.5);
-    const dy = 1000 * (Math.random() - 0.5);
+    const dx = 100 * (Math.random() - 0.5);
+    const dy = 100 * (Math.random() - 0.5);
     splat(x, y, dx, dy, color);
   }
 }
