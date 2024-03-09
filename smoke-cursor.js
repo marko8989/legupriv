@@ -5,12 +5,12 @@ canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 
 let config = {
-  TEXTURE_DOWNSAMPLE: 1,
-  DENSITY_DISSIPATION: 1,
-  VELOCITY_DISSIPATION: 1,
+  TEXTURE_DOWNSAMPLE: 5,
+  DENSITY_DISSIPATION: 2,
+  VELOCITY_DISSIPATION: 2,
   PRESSURE_DISSIPATION: 0.8,
   PRESSURE_ITERATIONS: 15,
-  CURL: 30,
+  CURL: 20,
   SPLAT_RADIUS: 0.0002
 };
 
@@ -620,29 +620,31 @@ function resizeCanvas() {
   }
 }
 
-document.addEventListener('mousemove', e => {
+
+document.addEventListener('mousemove', throttle(function(e) {
   pointers[0].down = true;
   pointers[0].color = [135 / 255, 91 / 255, 255 / 255];
-  
   pointers[0].moved = pointers[0].down;
   pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
   pointers[0].dy = (e.offsetY - pointers[0].y) * 10.0;
   pointers[0].x = e.offsetX;
   pointers[0].y = e.offsetY;
-});
+}, 100)); // Adjust the 100ms limit as needed
 
-document.addEventListener('touchmove', e => {
+
+document.addEventListener('touchmove', throttle(function(e) {
   e.preventDefault();
   const touches = e.targetTouches;
   for (let i = 0; i < touches.length; i++) {
-    let pointer = pointers[i];
+    let pointer = pointers[i] || new pointerPrototype();
     pointer.moved = pointer.down;
     pointer.dx = (touches[i].pageX - pointer.x) * 10.0;
     pointer.dy = (touches[i].pageY - pointer.y) * 10.0;
     pointer.x = touches[i].pageX;
     pointer.y = touches[i].pageY;
   }
-}, false);
+}, 100), { passive: false });
+
 
 // canvas.addEventListener('mousedown', () => {
 //   pointers[0].down = true;
@@ -664,9 +666,14 @@ document.addEventListener('touchstart', e => {
   }
 });
 
+document.addEventListener('mousedown', () => {
+  pointers[0].down = true;
+});
+
 document.addEventListener('mouseup', () => {
   pointers[0].down = false;
 });
+
 
 document.addEventListener('touchend', e => {
   const touches = e.changedTouches;
