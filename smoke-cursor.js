@@ -5,18 +5,32 @@ canvas.width = canvas.clientWidth;
 canvas.height = canvas.clientHeight;
 
 let config = {
-  TEXTURE_DOWNSAMPLE: 1,
+  TEXTURE_DOWNSAMPLE: 3,
   DENSITY_DISSIPATION: 1,
   VELOCITY_DISSIPATION: 1,
   PRESSURE_DISSIPATION: 0.8,
   PRESSURE_ITERATIONS: 15,
-  CURL: 30,
-  SPLAT_RADIUS: 0.0002
+  CURL: 20,
+  SPLAT_RADIUS: 0.25
 };
 
 
 let pointers = [];
 let splatStack = [];
+
+function throttle(callback, limit) {
+  let waiting = false; // Initially, not waiting
+  return function() {
+    if (!waiting) {
+      callback.apply(this, arguments);
+      waiting = true; // Prevent future invocations
+      setTimeout(function() {
+        waiting = false; // After a period, allow again
+      }, limit);
+    }
+  }
+}
+
 
 const { gl, ext } = getWebGLContext(canvas);
 
@@ -586,6 +600,8 @@ function update() {
 }
 
 function splat(x, y, dx, dy, color) {
+  dx *= 0.5;
+  dy *= 0.5;
   splatProgram.bind();
   gl.uniform1i(splatProgram.uniforms.uTarget, velocity.read[2]);
   gl.uniform1f(splatProgram.uniforms.aspectRatio, canvas.width / canvas.height);
@@ -602,12 +618,13 @@ function splat(x, y, dx, dy, color) {
 }
 
 function multipleSplats(amount) {
-  for (let i = 0; i < amount; i++) {
+  let optimizedAmount = Math.min(amount, 5);
+  for (let i = 0; i < optimizedAmount; i++) {
     const color = [Math.random() * 10, Math.random() * 10, Math.random() * 10];
     const x = canvas.width * Math.random();
     const y = canvas.height * Math.random();
-    const dx = 2000 * (Math.random() - 0.5);
-    const dy = 2000 * (Math.random() - 0.5);
+    const dx = 1000 * (Math.random() - 0.5);
+    const dy = 1000 * (Math.random() - 0.5);
     splat(x, y, dx, dy, color);
   }
 }
@@ -620,29 +637,29 @@ function resizeCanvas() {
   }
 }
 
-canvas.addEventListener('mousemove', e => {
-  pointers[0].down = true;
-  pointers[0].color = [135 / 255, 91 / 255, 255 / 255];
-  
+document.addEventListener('mousemove', throttle(function(e) {
+  // Extract your existing mousemove logic here
   pointers[0].moved = pointers[0].down;
   pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
   pointers[0].dy = (e.offsetY - pointers[0].y) * 10.0;
   pointers[0].x = e.offsetX;
   pointers[0].y = e.offsetY;
-});
+}, 100)); // Adjust the 100ms limit as needed
 
-canvas.addEventListener('touchmove', e => {
+
+canvas.addEventListener('touchmove', throttle(function(e) {
   e.preventDefault();
   const touches = e.targetTouches;
   for (let i = 0; i < touches.length; i++) {
-    let pointer = pointers[i];
+    let pointer = pointers[i] || new pointerPrototype();
     pointer.moved = pointer.down;
     pointer.dx = (touches[i].pageX - pointer.x) * 10.0;
     pointer.dy = (touches[i].pageY - pointer.y) * 10.0;
     pointer.x = touches[i].pageX;
     pointer.y = touches[i].pageY;
   }
-}, false);
+}, 100), { passive: false });
+
 
 // canvas.addEventListener('mousedown', () => {
 //   pointers[0].down = true;
