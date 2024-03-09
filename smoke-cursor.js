@@ -118,7 +118,7 @@ function pointerPrototype() {
   this.dy = 0;
   this.down = false;
   this.moved = false;
-  this.color = [135 / 255, 91 / 255, 255 / 255];
+  this.color = [30, 0, 300];
 }
 
 pointers.push(new pointerPrototype());
@@ -603,7 +603,7 @@ function splat(x, y, dx, dy, color) {
 
 function multipleSplats(amount) {
   for (let i = 0; i < amount; i++) {
-    const color = [135 / 255, 91 / 255, 255 / 255];
+    const color = [Math.random() * 10, Math.random() * 10, Math.random() * 10];
     const x = canvas.width * Math.random();
     const y = canvas.height * Math.random();
     const dx = 1000 * (Math.random() - 0.5);
@@ -620,23 +620,16 @@ function resizeCanvas() {
   }
 }
 
-document.addEventListener('mousemove', e => {
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;    // Relationship bitmap vs. element for X
-  const scaleY = canvas.height / rect.height;  // Relationship bitmap vs. element for Y
-
-  const canvasX = (e.clientX - rect.left) * scaleX;
-  const canvasY = (e.clientY - rect.top) * scaleY;
-
-  // Update pointer with canvas-relative coordinates
-  const pointer = pointers[0]; // Using the first pointer for simplicity
-  pointer.moved = pointer.down;
-  pointer.dx = (canvasX - pointer.x) * 10.0;
-  pointer.dy = (canvasY - pointer.y) * 10.0;
-  pointer.x = canvasX;
-  pointer.y = canvasY;
+canvas.addEventListener('mousemove', e => {
+  pointers[0].down = true;
+  pointers[0].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
+  
+  pointers[0].moved = pointers[0].down;
+  pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
+  pointers[0].dy = (e.offsetY - pointers[0].y) * 10.0;
+  pointers[0].x = e.offsetX;
+  pointers[0].y = e.offsetY;
 });
-
 
 canvas.addEventListener('touchmove', e => {
   e.preventDefault();
@@ -667,7 +660,7 @@ canvas.addEventListener('touchstart', e => {
     pointers[i].down = true;
     pointers[i].x = touches[i].pageX;
     pointers[i].y = touches[i].pageY;
-    pointers[i].color = [135 / 255, 91 / 255, 255 / 255];
+    pointers[i].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
   }
 });
 
