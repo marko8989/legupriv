@@ -18,6 +18,15 @@ let config = {
 let pointers = [];
 let splatStack = [];
 
+const overlay = document.createElement('div');
+overlay.style.position = 'fixed';
+overlay.style.top = '0';
+overlay.style.left = '0';
+overlay.style.width = '100%';
+overlay.style.height = '100%';
+overlay.style.pointerEvents = 'none'; // Allow clicks to pass through
+document.body.appendChild(overlay);
+
 function throttle(callback, limit) {
   let waiting = false; // Initially, not waiting
   return function() {
@@ -647,18 +656,24 @@ document.addEventListener('mousemove', throttle(function(e) {
 }, 100)); // Adjust the 100ms limit as needed
 
 
-document.addEventListener('touchmove', throttle(function(e) {
-  e.preventDefault();
-  const touches = e.targetTouches;
-  for (let i = 0; i < touches.length; i++) {
-    let pointer = pointers[i] || new pointerPrototype();
-    pointer.moved = pointer.down;
-    pointer.dx = (touches[i].pageX - pointer.x) * 10.0;
-    pointer.dy = (touches[i].pageY - pointer.y) * 10.0;
-    pointer.x = touches[i].pageX;
-    pointer.y = touches[i].pageY;
-  }
-}, 100), { passive: false });
+document.addEventListener('mousemove', throttle(function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width; // Relation between actual canvas size and displayed size
+    const scaleY = canvas.height / rect.height;
+
+    // Calculate mouse position relative to the canvas
+    const canvasX = (e.clientX - rect.left) * scaleX;
+    const canvasY = (e.clientY - rect.top) * scaleY;
+
+    pointers[0].x = canvasX;
+    pointers[0].y = canvasY;
+    pointers[0].moved = pointers[0].down;
+    if (pointers[0].down) {
+        pointers[0].dx = (canvasX - pointers[0].x) * 10.0;
+        pointers[0].dy = (canvasY - pointers[0].y) * 10.0;
+    }
+}, 100));
+
 
 
 // canvas.addEventListener('mousedown', () => {
