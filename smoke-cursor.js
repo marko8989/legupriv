@@ -622,7 +622,7 @@ function resizeCanvas() {
 
 canvas.addEventListener('mousemove', e => {
   pointers[0].down = true;
-  pointers[0].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
+  pointers[0].color = [135 / 255, 91 / 255, 255 / 255];
   
   pointers[0].moved = pointers[0].down;
   pointers[0].dx = (e.offsetX - pointers[0].x) * 10.0;
@@ -660,7 +660,7 @@ canvas.addEventListener('touchstart', e => {
     pointers[i].down = true;
     pointers[i].x = touches[i].pageX;
     pointers[i].y = touches[i].pageY;
-    pointers[i].color = [Math.random() + 0.2, Math.random() + 0.2, Math.random() + 0.2];
+    pointers[i].color = [135 / 255, 91 / 255, 255 / 255];
   }
 });
 
