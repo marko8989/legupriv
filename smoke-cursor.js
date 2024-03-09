@@ -18,14 +18,6 @@ let config = {
 let pointers = [];
 let splatStack = [];
 
-const overlay = document.createElement('div');
-overlay.style.position = 'fixed';
-overlay.style.top = '0';
-overlay.style.left = '0';
-overlay.style.width = '100%';
-overlay.style.height = '100%';
-overlay.style.pointerEvents = 'none'; // Allow clicks to pass through
-document.body.appendChild(overlay);
 
 function throttle(callback, limit) {
   let waiting = false; // Initially, not waiting
